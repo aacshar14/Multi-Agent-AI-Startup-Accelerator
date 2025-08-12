@@ -1,0 +1,71 @@
+generate_startup_ideas:
+  description: >-
+    Analyze the user's initial startup idea: **'{startup_idea_input}'**.
+    Flesh out this concept into a more detailed and refined startup plan.
+    Your final output should be a comprehensive document that expands on the
+    original idea, detailing a refined concept, target audience, and potential
+    key features. Do not invent a new idea; your goal is to build upon what the
+    user provided.
+  expected_output: >
+    A detailed document expanding on the user's initial concept.
+    The document should include:
+    - A refined business name and concept.
+    - A specific target market analysis.
+    - A list of core features and the unique value proposition.
+
+    
+conduct_market_research:
+  description: >
+    Conduct thorough market research on the selected startup idea. 
+    Analyze competitors, market size, target audience, and trends.
+  expected_output: >
+    A detailed market research report including competitor analysis, 
+    market size estimation, target audience profiling, and market trends.
+
+design_product_experience:
+  description: >
+    Design the user experience and product features for the startup. 
+    Create wireframes, user flows, and define core functionalities.
+  expected_output: >
+    Complete product design document with user flows, wireframes, 
+    feature specifications, and UX/UI guidelines.
+
+create_brand_identity:
+  description: >
+    Develop a comprehensive brand identity including name, logo concepts, 
+    color schemes, and brand positioning. Check domain availability.
+  expected_output: >
+    Brand identity package with company name, brand guidelines, 
+    logo concepts, and available domain recommendations.
+
+write_investor_pitch:
+  description: >
+    Create a compelling investor pitch deck that showcases the business 
+    opportunity, market potential, and competitive advantages.
+  expected_output: >
+    Complete investor pitch deck with problem statement, solution, 
+    market analysis, business model, and financial projections.
+
+develop_frontend_mvp:
+  description: >
+    Develop a minimum viable product (MVP) frontend using modern web 
+    technologies. Focus on core user-facing features.
+  expected_output: >
+    Functional frontend MVP with responsive design, core features 
+    implemented, and user interface ready for testing.
+
+build_backend_api:
+  description: >
+    Build a scalable backend API that supports the frontend functionality. 
+    Include database design, authentication, and core business logic.
+  expected_output: >
+    Complete backend API with database schema, authentication system, 
+    and all necessary endpoints documented and tested.
+
+deploy_mvp_infrastructure:
+  description: >
+    Deploy the complete MVP to production infrastructure with monitoring, 
+    CI/CD pipeline, and domain setup.
+  expected_output: >
+    Fully deployed MVP with live URL, monitoring dashboard, 
+    deployment documentation, and maintenance procedures.

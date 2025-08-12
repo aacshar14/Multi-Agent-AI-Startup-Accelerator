@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Crew AI - Launch Your Vision</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+        }
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .card {
+            background-color: #1a1a1a;
+            border-radius: 16px;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255,255,255,0.05) inset;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;
+        }
+        .btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: -100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.4s ease;
+        }
+        .btn:hover:after {
+            left: 100%;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn:disabled:hover:after {
+            left: -100%;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+        }
+        .btn-primary:hover:not(:disabled) {
+            box-shadow: 0 0 20px rgba(37, 117, 252, 0.5);
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: linear-gradient(90deg, #374151 0%, #4b5563 100%);
+        }
+        .btn-secondary:hover:not(:disabled) {
+            box-shadow: 0 0 15px rgba(75, 85, 99, 0.5);
+            transform: translateY(-2px);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+            padding: 1rem;
+        }
+        .modal-content {
+            background-color: #1c1c1c;
+            border: 1px solid #333;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            animation: slideIn 0.4s ease-out;
+            overflow: hidden;
+        }
+        .close-button {
+            color: #888;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-button:hover { color: #fff; }
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 { font-weight: 600; margin-top: 1.2rem; margin-bottom: 0.6rem; color: #f0f0f0; }
+        .markdown-content h1 { font-size: 1.6em; } .markdown-content h2 { font-size: 1.4em; } .markdown-content h3 { font-size: 1.2em; }
+        .markdown-content ul, .markdown-content ol { margin-left: 1.5rem; }
+        .markdown-content pre { background-color: #0d0d0d; padding: 1.2rem; border-radius: 8px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; border: 1px solid #2a2a2a; margin: 1.2rem 0; }
+        .markdown-content code { font-family: 'Fira Code', 'Menlo', monospace; background-color: #282c34; padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.9em; }
+        .markdown-content p { margin-bottom: 1rem; line-height: 1.7; color: #b0b0b0; }
+        .markdown-content blockquote { border-left: 4px solid #6a11cb; padding-left: 1.5rem; margin: 1.2rem 0; background-color: #1f1f1f; padding: 1.2rem; border-radius: 0 8px 8px 0; }
+        .markdown-content table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; }
+        .markdown-content th, .markdown-content td { border: 1px solid #333; padding: 0.75rem; text-align: left; }
+        .markdown-content th { background-color: #252525; font-weight: 600; color: #f0f0f0; }
+        .markdown-content a { color: #2575fc; text-decoration: none; transition: color 0.2s; border-bottom: 1px dotted #2575fc; }
+        .markdown-content a:hover { color: #82aaff; border-bottom-style: solid; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .animated-gradient-text { background: linear-gradient(90deg, #6a11cb, #2575fc, #6a11cb); background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% 200%; animation: gradient-animation 5s ease infinite; }
+        @keyframes gradient-animation { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        
+        /* Mobile responsiveness fixes */
+        @media (max-width: 768px) {
+            .modal-content {
+                margin: 1rem;
+                max-height: 85vh;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .btn {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+            }
+            .text-5xl {
+                font-size: 2.5rem;
+            }
+            .text-7xl {
+                font-size: 3rem;
+            }
+        }
+        
+        /* Button states */
+        .btn-loading {
+            position: relative;
+        }
+        .btn-loading:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="relative min-h-screen">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=6000'); filter: blur(3px) brightness(0.4);"></div>
+        <div class="relative container mx-auto p-4 md:p-8 z-10">
+            <header class="text-center mb-8 md:mb-12">
+                <h1 class="text-4xl md:text-5xl lg:text-7xl font-poppins font-bold text-white tracking-tight">
+                    <span class="animated-gradient-text">Startup Crew AI</span>
+                </h1>
+                <p class="text-base md:text-lg text-gray-400 mt-4 max-w-3xl mx-auto px-4">Turn your groundbreaking idea into a reality with your dedicated AI-powered team. Describe your vision, and let the crew build the foundation.</p>
+            </header>
+
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-black/30 backdrop-blur-xl p-4 md:p-8 rounded-2xl shadow-2xl border border-white/10">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl md:text-3xl font-poppins font-semibold text-white">Let's Hear Your Big Idea</h2>
+                        <button id="settings-btn" class="text-gray-400 hover:text-white transition-colors duration-300 transform hover:rotate-90 p-2 rounded-lg hover:bg-white/10" aria-label="Open settings">
+                            <i class="fas fa-cog text-xl md:text-2xl"></i>
+                        </button>
+                    </div>
+                    <textarea id="startup-idea-input" class="w-full p-4 bg-gray-900/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-white text-base md:text-lg resize-none" rows="5" placeholder="e.g., A decentralized platform for artists to tokenize and sell their work as NFTs..."></textarea>
+                    <button id="kickoff-btn" class="mt-6 w-full text-white font-bold py-3 md:py-4 px-4 rounded-lg btn btn-primary text-lg md:text-xl font-poppins min-h-[3rem] md:min-h-[3.5rem]">
+                        <span id="kickoff-btn-content">
+                            <i class="fas fa-rocket mr-2 md:mr-3"></i>Assemble the Crew & Kickoff
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="loading-spinner" class="text-center my-12 hidden">
+                <i class="fas fa-sync-alt fa-spin fa-3x md:fa-4x text-blue-500"></i>
+                <p class="mt-4 text-gray-300 text-lg md:text-xl">The AI crew is brainstorming... this may take a moment.</p>
+            </div>
+
+            <div id="results-container" class="mt-8 md:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="p-4 md:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl md:text-3xl font-poppins font-bold text-white">Configuration Hub</h2>
+                    <button id="close-modal-btn" class="close-button" aria-label="Close settings">&times;</button>
+                </div>
+                
+                <div class="space-y-6 md:space-y-8 max-h-[60vh] overflow-y-auto pr-2 md:pr-4">
+                    <div>
+                        <h3 class="text-lg md:text-xl font-semibold mb-4 text-blue-400 border-b-2 border-blue-400/30 pb-2">API Keys</h3>
+                        <div id="api-keys-container" class="space-y-4">
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg md:text-xl font-semibold mb-4 text-green-400 border-b-2 border-green-400/30 pb-2">Agent LLM Assignments</h3>
+                        <div id="agent-settings-container" class="space-y-4">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 md:mt-8 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                    <button id="save-settings-btn" class="w-full sm:flex-1 bg-blue-600 text-white font-bold py-3 px-4 rounded-lg btn hover:bg-blue-700">
+                        <i class="fas fa-save mr-2"></i>Save Settings
+                    </button>
+                    <button id="clear-settings-btn" class="w-full sm:flex-1 bg-red-600 text-white font-bold py-3 px-4 rounded-lg btn hover:bg-red-700">
+                        <i class="fas fa-trash-alt mr-2"></i>Clear All
+                    </button>
+                    <button id="export-settings-btn" class="w-full sm:flex-1 bg-green-600 text-white font-bold py-3 px-4 rounded-lg btn hover:bg-green-700">
+                        <i class="fas fa-file-export mr-2"></i>Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const kickoffBtn = document.getElementById('kickoff-btn');
+            const kickoffBtnContent = document.getElementById('kickoff-btn-content');
+            const startupIdeaInput = document.getElementById('startup-idea-input');
+            const resultsContainer = document.getElementById('results-container');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const settingsBtn = document.getElementById('settings-btn');
+            const settingsModal = document.getElementById('settings-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const agentSettingsContainer = document.getElementById('agent-settings-container');
+            const apiKeysContainer = document.getElementById('api-keys-container');
+            const saveSettingsBtn = document.getElementById('save-settings-btn');
+            const clearSettingsBtn = document.getElementById('clear-settings-btn');
+            const exportSettingsBtn = document.getElementById('export-settings-btn');
+
+            const agents = [
+                { id: 'ideator', name: 'Ideator', icon: 'fa-lightbulb', color: '#facc15' },
+                { id: 'researcher', name: 'Market Researcher', icon: 'fa-search', color: '#60a5fa' },
+                { id: 'product_designer', name: 'Product Designer', icon: 'fa-drafting-compass', color: '#c084fc' },
+                { id: 'brand_expert', name: 'Brand Expert', icon: 'fa-tags', color: '#f472b6' },
+                { id: 'pitch_writer', name: 'Pitch Writer', icon: 'fa-file-alt', color: '#fb923c' },
+                { id: 'frontend_dev', name: 'Frontend Developer', icon: 'fa-code', color: '#4ade80' },
+                { id: 'backend_dev', name: 'Backend Developer', icon: 'fa-server', color: '#818cf8' },
+                { id: 'infra_tech', name: 'Infrastructure Tech', icon: 'fa-cloud', color: '#2dd4bf' }
+            ];
+
+            const llms = ['gpt-4o-mini', 'gpt-4', 'gpt-3.5-turbo', 'claude-3-opus-20240229', 'claude-3-sonnet-20240229', 'gemini/gemini-pro', 'deepseek/deepseek-coder'];
+            
+            const llmDisplayNames = {
+                'gpt-4o-mini': 'GPT-4o Mini', 'gpt-4': 'GPT-4', 'gpt-3.5-turbo': 'GPT-3.5 Turbo',
+                'claude-3-opus-20240229': 'Claude 3 Opus', 'claude-3-sonnet-20240229': 'Claude 3 Sonnet',
+                'gemini/gemini-pro': 'Gemini Pro', 'deepseek/deepseek-coder': 'Deepseek Coder'
+            };
+
+            function populateSettings() {
+                apiKeysContainer.innerHTML = llms.map(llm => {
+                    const displayName = llmDisplayNames[llm] || llm;
+                    const keyId = `api-key-${llm.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                    return `
+                        <div class="p-4 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <label for="${keyId}" class="text-sm md:text-md font-semibold text-gray-300 flex items-center mb-2">
+                                <i class="fas fa-key text-blue-400 mr-2 md:mr-3"></i> ${displayName} API Key
+                            </label>
+                            <div class="relative">
+                                <input type="password" id="${keyId}" 
+                                       class="w-full px-3 md:px-4 py-2 md:py-3 bg-gray-900 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 text-white text-sm md:text-base" 
+                                       placeholder="Enter API key">
+                                <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white transition-colors" aria-label="Toggle password visibility" onclick="togglePasswordVisibility('${keyId}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                agentSettingsContainer.innerHTML = agents.map(agent => `
+                    <div class="p-4 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <label for="${agent.id}-llm" class="text-sm md:text-md font-semibold text-gray-300 flex items-center mb-2">
+                            <i class="fas ${agent.icon} mr-2 md:mr-3" style="color: ${agent.color};"></i> ${agent.name}
+                        </label>
+                        <select id="${agent.id}-llm" class="w-full px-3 md:px-4 py-2 md:py-3 bg-gray-900 border border-gray-600 rounded-md focus:ring-2 focus:ring-green-500 text-white text-sm md:text-base">
+                            ${llms.map(llm => `<option value="${llm}">${llmDisplayNames[llm] || llm}</option>`).join('')}
+                        </select>
+                    </div>
+                `).join('');
+            }
+
+            function loadSavedSettings() {
+                llms.forEach(llm => {
+                    const keyId = `api-key-${llm.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                    const savedKey = localStorage.getItem(keyId);
+                    if (savedKey) {
+                        const input = document.getElementById(keyId);
+                        if (input) input.value = savedKey;
+                    }
+                });
+                agents.forEach(agent => {
+                    const selectId = `${agent.id}-llm`;
+                    const savedLLM = localStorage.getItem(selectId);
+                    if (savedLLM) {
+                        const select = document.getElementById(selectId);
+                        if (select) select.value = savedLLM;
+                    }
+                });
+            }
+
+            function saveSettings() {
+                llms.forEach(llm => {
+                    const keyId = `api-key-${llm.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                    const input = document.getElementById(keyId);
+                    if (input && input.value.trim()) {
+                        localStorage.setItem(keyId, input.value);
+                    } else {
+                        localStorage.removeItem(keyId);
+                    }
+                });
+                agents.forEach(agent => {
+                    const selectId = `${agent.id}-llm`;
+                    const select = document.getElementById(selectId);
+                    if (select) {
+                        localStorage.setItem(selectId, select.value);
+                    }
+                });
+            }
+
+            populateSettings();
+            loadSavedSettings();
+
+            // Event listeners
+            settingsBtn.addEventListener('click', () => {
+                settingsModal.style.display = 'flex';
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                settingsModal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target === settingsModal) {
+                    settingsModal.style.display = 'none';
+                }
+            });
+
+            // Escape key to close modal
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && settingsModal.style.display === 'flex') {
+                    settingsModal.style.display = 'none';
+                }
+            });
+
+            saveSettingsBtn.addEventListener('click', () => {
+                saveSettings();
+                showToast('Settings Saved!', 'success');
+                settingsModal.style.display = 'none';
+            });
+
+            clearSettingsBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to clear all settings? This action cannot be undone.')) {
+                    localStorage.clear();
+                    populateSettings();
+                    loadSavedSettings();
+                    showToast('All settings cleared.', 'info');
+                }
+            });
+
+            exportSettingsBtn.addEventListener('click', () => {
+                saveSettings();
+                const settingsData = {};
+                llms.forEach(llm => {
+                    const keyId = `api-key-${llm.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                    const savedKey = localStorage.getItem(keyId);
+                    if (savedKey) {
+                        settingsData[keyId] = savedKey;
+                    }
+                });
+                agents.forEach(agent => {
+                    const selectId = `${agent.id}-llm`;
+                    const savedLLM = localStorage.getItem(selectId);
+                    if (savedLLM) {
+                        settingsData[selectId] = savedLLM;
+                    }
+                });
+                const blob = new Blob([JSON.stringify(settingsData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'startup_crew_settings.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast('Settings exported!', 'success');
+            });
+
+            window.togglePasswordVisibility = (inputId) => {
+                const input = document.getElementById(inputId);
+                const icon = input.nextElementSibling.querySelector('i');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.className = 'fas fa-eye-slash';
+                } else {
+                    input.type = 'password';
+                    icon.className = 'fas fa-eye';
+                }
+            };
+
+            kickoffBtn.addEventListener('click', () => {
+                const idea = startupIdeaInput.value.trim();
+                if (!idea) {
+                    showToast('Please enter your startup idea first.', 'error');
+                    startupIdeaInput.focus();
+                    return;
+                }
+                
+                // Validate API keys
+                const usedLLMs = new Set(agents.map(agent => {
+                    const select = document.getElementById(`${agent.id}-llm`);
+                    return select ? select.value : 'gpt-4o-mini';
+                }));
+                
+                const missingKeys = [...usedLLMs].filter(llm => {
+                    const keyId = `api-key-${llm.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                    const input = document.getElementById(keyId);
+                    return !input || !input.value.trim();
+                });
+
+                if (missingKeys.length > 0) {
+                    const missingNames = missingKeys.map(llm => llmDisplayNames[llm] || llm).join(', ');
+                    showToast(`Missing API keys for: ${missingNames}`, 'error');
+                    settingsModal.style.display = 'flex';
+                    return;
+                }
+                
+                kickoffCrewBackend(idea);
+            });
+
+            async function kickoffCrewBackend(idea) {
+                resultsContainer.innerHTML = '';
+                loadingSpinner.classList.remove('hidden');
+                
+                // Update button state
+                kickoffBtn.disabled = true;
+                kickoffBtn.classList.add('btn-loading');
+                kickoffBtnContent.style.opacity = '0';
+
+                const agentConfigs = {};
+                agents.forEach(agent => {
+                    const llmSelect = document.getElementById(`${agent.id}-llm`);
+                    const selectedLLM = llmSelect ? llmSelect.value : 'gpt-4o-mini';
+                    const keyId = `api-key-${selectedLLM.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                    const apiKeyInput = document.getElementById(keyId);
+                    agentConfigs[agent.id] = {
+                        llm: selectedLLM,
+                        api_key: apiKeyInput ? apiKeyInput.value : ''
+                    };
+                });
+
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/kickoff', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ startup_idea_input: idea, agent_configs: agentConfigs }),
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    const results = await response.json();
+                    loadingSpinner.classList.add('hidden');
+                    
+                    agents.forEach((agent, index) => {
+                        const output = results[agent.id] || "No output was generated for this agent.";
+                        setTimeout(() => displayResult(agent, output), 150 * index);
+                    });
+                    
+                    showToast('Crew assembly complete!', 'success');
+                } catch (error) {
+                    loadingSpinner.classList.add('hidden');
+                    console.error("Failed to kickoff crew:", error);
+                    showToast("Connection failed. Please check if the backend server is running.", 'error');
+                } finally {
+                    // Reset button state
+                    kickoffBtn.disabled = false;
+                    kickoffBtn.classList.remove('btn-loading');
+                    kickoffBtnContent.style.opacity = '1';
+                }
+            }
+
+            function displayResult(agent, output) {
+                const card = document.createElement('div');
+                card.className = 'card p-4 md:p-6 flex flex-col transition-opacity duration-500';
+                card.style.opacity = 0;
+
+                let parsedOutput;
+                try {
+                    parsedOutput = marked.parse(output);
+                } catch (e) {
+                    console.error("Markdown parsing error for agent:", agent.id, e);
+                    parsedOutput = `<p class="text-red-400">Error displaying content. Output might be malformed.</p>`;
+                }
+
+                const cardHeader = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-gray-800 rounded-lg flex items-center justify-center mr-3 md:mr-4" style="border: 1px solid ${agent.color};">
+                                <i class="fas ${agent.icon} text-sm md:text-lg" style="color: ${agent.color};"></i>
+                            </div>
+                            <h3 class="text-lg md:text-xl font-bold text-white font-poppins">${agent.name}</h3>
+                        </div>
+                        <button class="copy-btn text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10" aria-label="Copy content" data-agent-id="${agent.id}">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>`;
+                
+                const cardContent = `<div id="${agent.id}-content" class="markdown-content text-gray-400 flex-grow max-h-80 md:max-h-96 overflow-y-auto pr-2 text-sm md:text-base">${parsedOutput}</div>`;
+                
+                let cardFooter = '';
+                if (agent.id === 'frontend_dev') {
+                    cardFooter = `
+                        <div class="mt-4 pt-4 border-t border-gray-700">
+                            <button class="preview-btn w-full bg-green-600 text-white font-semibold py-2 md:py-3 px-4 rounded-lg btn hover:bg-green-700">
+                                <i class="fas fa-eye mr-2"></i>Preview Design
+                            </button>
+                        </div>`;
+                }
+
+                card.innerHTML = cardHeader + cardContent + cardFooter;
+                resultsContainer.appendChild(card);
+                
+                // Staggered animation
+                requestAnimationFrame(() => {
+                    card.style.opacity = 1;
+                });
+
+                // Add event listener for the copy button
+                const copyBtn = card.querySelector('.copy-btn');
+                if (copyBtn) {
+                    copyBtn.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        const button = e.currentTarget;
+                        const contentElement = document.getElementById(`${agent.id}-content`);
+                        const text = contentElement ? contentElement.innerText : '';
+                        
+                        try {
+                            await navigator.clipboard.writeText(text);
+                            const originalContent = button.innerHTML;
+                            button.innerHTML = '<i class="fas fa-check text-green-500"></i>';
+                            button.disabled = true;
+                            setTimeout(() => {
+                                button.innerHTML = originalContent;
+                                button.disabled = false;
+                            }, 2000);
+                            showToast('Content copied to clipboard!', 'success');
+                        } catch (err) {
+                            showToast('Failed to copy content.', 'error');
+                            console.error('Copy failed:', err);
+                        }
+                    });
+                }
+
+                // Add event listener for preview button
+                if (agent.id === 'frontend_dev') {
+                    const previewBtn = card.querySelector('.preview-btn');
+                    if (previewBtn) {
+                        previewBtn.addEventListener('click', () => {
+                            try {
+                                const newTab = window.open('', '_blank');
+                                if (newTab) {
+                                    newTab.document.write(`
+                                        <!DOCTYPE html><html lang="en">
+                                        <head>
+                                            <meta charset="UTF-8">
+                                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                            <title>Frontend Preview</title>
+                                            <script src="https://cdn.tailwindcss.com"><\/script>
+                                        </head>
+                                        <body class="bg-gray-100 p-4">${output}</body>
+                                        </html>
+                                    `);
+                                    newTab.document.close();
+                                } else {
+                                    showToast('Popup blocked. Please allow popups for this site.', 'error');
+                                }
+                            } catch (err) {
+                                showToast('Failed to open preview.', 'error');
+                                console.error('Preview failed:', err);
+                            }
+                        });
+                    }
+                }
+            }
+
+            function showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                const colors = {
+                    success: 'bg-green-600', 
+                    error: 'bg-red-600', 
+                    info: 'bg-blue-600'
+                };
+                
+                toast.className = `fixed bottom-4 right-4 md:bottom-5 md:right-5 text-white py-3 px-4 md:px-5 rounded-lg shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-[200] ${colors[type]} max-w-xs md:max-w-sm text-sm md:text-base`;
+                toast.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'} mr-2"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                
+                requestAnimationFrame(() => {
+                    toast.style.transform = 'translateY(0)';
+                    toast.style.opacity = '1';
+                });
+
+                setTimeout(() => {
+                    toast.style.transform = 'translateY(20px)';
+                    toast.style.opacity = '0';
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.remove();
+                        }
+                    }, 300);
+                }, 4000);
+            }
+
+            // Auto-resize textarea
+            startupIdeaInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+            });
+
+            // Enter key handling for textarea
+            startupIdeaInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                    kickoffBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
